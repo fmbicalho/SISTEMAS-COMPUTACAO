@@ -1,0 +1,151 @@
+//******************************************************************************
+//(1A)Comentar o código assembly:
+
+int dw_loop(int x, int y, int n)
+{
+  do {
+    x += n;
+    y *= n;
+    n--;
+}while ((n > 0) & (y < n)); //O operador usado é o E lógico ’&’ e não a conjunção ‘&&’
+return x;
+}
+
+movl 8(%ebp),%esi  ; esi = M[ebp+8]  = x
+movl 12(%ebp),%ebx ; ebx = M[ebp+12] = y
+movl 16(%ebp),%ecx ; ecx = M[ebp+16] = n
+.p2align 4,,7      ; alinha o cÃ³digo na memÃ³ria para otimizar a utilizaÃ§Ã£o da cache
+.L6:               ; CORPO CICLO
+imull %ecx,%ebx    ; ebx = ecx* ebx <=> y = n +y
+addl %ecx,%esi     ; esi = esi + ecx <=> x = x + n
+decl %ecx          ; n--
+testl %ecx,%ecx    ; 
+setg %al           ; 
+cmpl %ecx,%ebx     ; 
+setl %dl           ; 
+andl %edx,%eax     ; 
+testb $1,%al       ; 
+jne .L6            ; 
+
+//(1B) Registos utilizados
+
+-------   --------------------------  -------------
+Registo   VariÃ¡vel                    Valor inicial
+-------   --------------------------  -------------
+  
+  
+  
+        
+  
+-------   --------------------------  -------------
+
+//(1C) Teste e corpo do ciclo em C e assembly
+
+CORPO:
+TESTE:
+
+//******************************************************************************
+//(2A) Comentar o código assembly
+
+movl 8(%ebp),%eax   ; 
+movl 12(%ebp),%ebx  ; 
+xorl %ecx,%ecx      ; 
+movl %eax,%edx      ; 
+.p2align 4,,7       ; alinha o cÃ³digo na memÃ³ria para otimizar a utilizaÃ§Ã£o da cache
+.L5:                ; 
+addl %eax,%edx      ; 
+subl %ebx,%eax      ; 
+addl %ebx,%ecx      ; 
+cmpl $255,%ecx     ; 
+jle .L5            ; 
+movl %edx, %eax    ; 
+
+//(2B) Registos utilizados
+
+------- --------------------------  -------------
+Registo VariÃ¡vel                    Valor inicial
+------- --------------------------  -------------
+   
+   
+    
+         
+------- --------------------------  -------------
+
+//(2C) Teste e corpo do ciclo em C e assembly
+
+CORPO: 
+TESTE: 
+
+ 
+
+//(2D) Otimizações feitas pelo compilador
+
+*  
+* 
+* 
+
+//******************************************************************************
+//(3) apontadores: Considere que o apontador para o inÃ­cio do vector S 
+     (do tipo short int) e o Ã­ndice i (do tipo int) estÃ£o armazenados 
+     nos registos %edx e %ecx. Complete a tabela:
+
+---------   -------------    -----------------------------   ----------------------------------------
+ExpressÃ£o   Tipo de Dados    Valor                           InstruÃ§Ã£o que guarda resultado em eax/ax
+---------   -------------    -----------------------------   ----------------------------------------
+S+1         
+S[3]        
+&S[i]       
+S[4*i+1]    
+S+i-5       
+---------   -------------    -----------------------------   ----------------------------------------
+
+///******************************************************************************
+//(4) Estruturas: considere-se a função sp_init (com algumas expressÃµes omitidas)
+
+struct prob {
+   int *p;
+   struct {
+       int x;
+       int y;
+   } s;
+   struct prob *next;
+};
+
+void sp_init(struct prob *sp)
+{
+   sp->s.x  = _________ ;
+   sp->p    = _________ ;
+   sp->next = _________ ;
+}
+
+//(4A) Quantos bytes sÃo necessá¡rios para representar a estrutura?
+
+       
+
+//(4B) Qual o valor do deslocamento em relação ao início do vetor (em número de bytes) de cada campo
+
+Campo   Deslocamento
+ p      
+ s.x    
+ s.y    
+ next   
+
+//(4C) Após compilar sp_init, o código de montagem que lhe corresponde o seguinte:
+
+movl 8(%ebp),%eax  ; 
+movl 8(%eax),%edx  ; 
+movl  %edx,4(%eax) ; 
+leal 4(%eax),%edx  ; 
+movl %edx,(%eax)   ; 
+movl %eax,12(%eax) ; 
+
+//Preencha as expressões em falta no código C da função.
+
+void sp_init(struct prob *sp)
+{
+sp->s.x  = _____ ;
+sp->p    = _____ ;
+sp->next = _____ ;
+}
+
+//******************************************************************************
